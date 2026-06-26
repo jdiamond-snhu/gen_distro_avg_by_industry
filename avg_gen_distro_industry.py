@@ -97,7 +97,7 @@ else:
 filtered_df = df_historical[(df_historical["Year"] >= from_year) & (df_historical["Year"] <= to_year)]
 
 # --- SECTION 1: GRID RENDERING ENGINE FOR PIES (NOW ON TOP) ---
-st.subheader(f"Data provided by the U.S. Bureau of Labor Statistics, BLS ({from_year} to {to_year})")
+st.subheader(f"Data provided by the U.S. Bureau of Labor Statistics ({from_year} to {to_year})")
 aggregated_df = filtered_df.groupby("Industry")[["Male (%)", "Female (%)"]].mean().reset_index()
 
 cols = st.columns(4)
