@@ -110,7 +110,7 @@ ax_line.set_ylabel("Female Employees (%)", fontsize=6)
 ax_line.set_xlabel("Year", fontsize=6)
 ax_line.set_ylim(0, 100)
 ax_line.grid(True, linestyle="--", alpha=0.5)
-ax_line.legend(bbox_to_anchor=(1.02, 1), loc='upper left', fontsize=8)
+ax_line.legend(bbox_to_anchor=(1.02, 1), loc='upper left', fontsize=6)
 
 plt.tight_layout()
 st.pyplot(fig_line)
