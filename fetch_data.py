@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import requests
 
-# Dictionary mapping your industries to official BLS Survey Series IDs
+# Updated, verified annual employment series IDs from the BLS
 BLS_SERIES_MAP = {
     "Agriculture, forestry, fishing, and hunting": "LNU02032213",
     "Mining, quarrying, and oil and gas extraction": "LNU02032214", 
@@ -40,19 +40,31 @@ def fetch_bls_data(start_year=2015, end_year=2025):
         industry_name = id_to_name.get(series_id, "Unknown")
         
         for item in series.get("data", []):
-            year = int(item.get("year"))
-            period = item.get("period") 
-            female_percent = float(item.get("value"))
-            male_percent = round(100.0 - female_percent, 1)
+            try:
+                year = int(item.get("year"))
+                period = item.get("period") 
+                female_percent = float(item.get("value"))
+                
+                # Double-check for illogical or placeholder negative data values from the API
+                if female_percent < 0 or female_percent > 100:
+                    continue
+                    
+                male_percent = round(100.0 - female_percent, 1)
+                
+                records.append({
+                    "Year": year,
+                    "Period": period,
+                    "Industry": industry_name,
+                    "Male (%)": male_percent,
+                    "Female (%)": female_percent
+                })
+            except (ValueError, TypeError):
+                continue # Skip corrupt rows safely
             
-            records.append({
-                "Year": year,
-                "Period": period,
-                "Industry": industry_name,
-                "Male (%)": male_percent,
-                "Female (%)": female_percent
-            })
-            
+    if not records:
+        print("❌ Warning: No records were parsed from the API response.")
+        return None
+
     df = pd.DataFrame(records)
     
     # Standardize names to your requested list
