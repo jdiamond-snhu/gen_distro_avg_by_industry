@@ -89,7 +89,7 @@ active_laws = [l for l in legislation_data if from_year <= l["Year"] <= to_year]
 if active_laws:
     for law in active_laws:
         st.sidebar.markdown(f"**{law['Year']} - {law['Title']}**")
-     # --- GRID RENDERING ENGINE FOR PIES ---
+# --- GRID RENDERING ENGINE FOR PIES ---
 st.subheader(f"📊 Averaged Section Snapshots ({from_year} to {to_year})")
 aggregated_df = filtered_df.groupby("Industry")[["Male (%)", "Female (%)"]].mean().reset_index()
 
@@ -118,7 +118,6 @@ for idx, row in aggregated_df.iterrows():
         # FIX: Added use_container_width=False to lock the pie chart to its true small size
         st.pyplot(fig_pie, use_container_width=False)
         plt.close(fig_pie)
-st.markdown("---")
 
 # --- GRID RENDERING ENGINE FOR PIES ---
 st.subheader(f"📊 Averaged Section Snapshots ({from_year} to {to_year})")
