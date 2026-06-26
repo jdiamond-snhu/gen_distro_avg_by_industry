@@ -6,15 +6,17 @@ import pandas as pd
 st.set_page_config(page_title="Historical Gender Ratio", layout="wide")
 st.title("📊 Historical Gender Ratio Dashboard by Industry")
 
-# --- MOCK HISTORICAL DATASET ---
-# In a real app, you would load this directly from your scraped CSV or database.
-historical_data = {
-    "Year": [2018, 2018, 2019, 2019, 2020, 2020, 2021, 2021, 2022, 2022, 2023, 2023, 2024, 2024, 2025, 2025],
-    "Industry": ["Tech", "Healthcare", "Tech", "Healthcare", "Tech", "Healthcare", "Tech", "Healthcare", 
-                 "Tech", "Healthcare", "Tech", "Healthcare", "Tech", "Healthcare", "Tech", "Healthcare"],
-    "Male (%)": [75, 22, 74, 21, 73, 23, 72, 24, 71, 25, 70, 24, 69, 23, 68, 22],
-    "Female (%)": [25, 78, 26, 79, 27, 77, 28, 76, 29, 75, 30, 76, 31, 77, 32, 78]
-}
+@st.cache_data # This optimization caches the data so your file isn't re-read on every click
+def load_scraped_data():
+    try:
+        return pd.read_csv("gender_by_industry.csv")
+    except FileNotFoundError:
+        # Fallback if you haven't run fetch_data.py yet
+        st.warning("Data file not found. Running script to fetch live data...")
+        import fetch_data
+        return fetch_data.fetch_bls_data()
+
+df_historical = load_scraped_data()
 df_historical = pd.DataFrame(historical_data)
 
 # --- SIDEBAR YEAR FILTERS ---
