@@ -96,29 +96,7 @@ else:
 # --- FILTER DATA BASED ON SLIDER ---
 filtered_df = df_historical[(df_historical["Year"] >= from_year) & (df_historical["Year"] <= to_year)]
 
-# --- LINE GRAPH SECTION ---
-st.subheader(f"📈 Timeline Trends: Female Workforce Representation ({from_year} - {to_year})")
-st.markdown("*Note how stable and flat the trajectory lines remain over time across different sectors.*")
-
-fig_line, ax_line = plt.subplots(figsize=(8, 2))
-
-for industry in filtered_df["Industry"].unique():
-    ind_data = filtered_df[filtered_df["Industry"] == industry].sort_values("Year")
-    ax_line.plot(ind_data["Year"], ind_data["Female (%)"], marker='o', linewidth=2, label=industry)
-
-ax_line.set_ylabel("Female Employees (%)", fontsize=6)
-ax_line.set_xlabel("Year", fontsize=6)
-ax_line.set_ylim(0, 100)
-ax_line.grid(True, linestyle="--", alpha=0.5)
-ax_line.legend(bbox_to_anchor=(1.02, 1), loc='upper left', fontsize=6)
-
-plt.tight_layout()
-st.pyplot(fig_line)
-plt.close(fig_line)
-
-st.markdown("---")
-
-# --- GRID RENDERING ENGINE FOR PIES ---
+# --- SECTION 1: GRID RENDERING ENGINE FOR PIES (NOW ON TOP) ---
 st.subheader(f"📊 Averaged Section Snapshots ({from_year} to {to_year})")
 aggregated_df = filtered_df.groupby("Industry")[["Male (%)", "Female (%)"]].mean().reset_index()
 
@@ -144,3 +122,25 @@ for idx, row in aggregated_df.iterrows():
         plt.tight_layout()
         st.pyplot(fig_pie, use_container_width=False)
         plt.close(fig_pie)
+
+st.markdown("---")
+
+# --- SECTION 2: LINE GRAPH SECTION (NOW ON BOTTOM) ---
+st.subheader(f"📈 Timeline Trends: Female Workforce Representation ({from_year} - {to_year})")
+st.markdown("*Note how stable and flat the trajectory lines remain over time across different sectors.*")
+
+fig_line, ax_line = plt.subplots(figsize=(10, 3.5))
+
+for industry in filtered_df["Industry"].unique():
+    ind_data = filtered_df[filtered_df["Industry"] == industry].sort_values("Year")
+    ax_line.plot(ind_data["Year"], ind_data["Female (%)"], marker='o', linewidth=2, label=industry)
+
+ax_line.set_ylabel("Female Employees (%)", fontsize=10)
+ax_line.set_xlabel("Year", fontsize=10)
+ax_line.set_ylim(0, 100)
+ax_line.grid(True, linestyle="--", alpha=0.5)
+ax_line.legend(bbox_to_anchor=(1.02, 1), loc='upper left', fontsize=9)
+
+plt.tight_layout()
+st.pyplot(fig_line)
+plt.close(fig_line)
