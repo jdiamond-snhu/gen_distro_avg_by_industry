@@ -4,7 +4,7 @@ import pandas as pd
 
 # Set up page configuration
 st.set_page_config(page_title="Historical Gender Ratio", layout="wide")
-st.title("📊 Historical Gender Ratio Dashboard by Industry from the U.S. Bureau of Labor Statistics, BLS")
+st.title("📊 Historical Gender Ratio Dashboard by Industry")
 
 # --- COMPLETE VERIFIED HISTORICAL DATASET ---
 raw_data = {
@@ -99,7 +99,7 @@ else:
 filtered_df = df_historical[(df_historical["Year"] >= from_year) & (df_historical["Year"] <= to_year)]
 aggregated_df = filtered_df.groupby("Industry")[["Male (%)", "Female (%)"]].mean().reset_index()
 
-st.subheader(f"Average Gender Distribution from {from_year} to {to_year}")
+st.subheader(f"Average Gender Distribution from {from_year} to {to_year} from the U.S. Bureau of Labor Statistics, BLS")
 
 # --- GRID RENDERING ENGINE ---
 cols = st.columns(4)
