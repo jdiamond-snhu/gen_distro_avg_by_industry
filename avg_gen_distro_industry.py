@@ -106,11 +106,11 @@ for industry in filtered_df["Industry"].unique():
     ind_data = filtered_df[filtered_df["Industry"] == industry].sort_values("Year")
     ax_line.plot(ind_data["Year"], ind_data["Female (%)"], marker='o', linewidth=2, label=industry)
 
-ax_line.set_ylabel("Female Employees (%)", fontsize=10)
-ax_line.set_xlabel("Year", fontsize=10)
+ax_line.set_ylabel("Female Employees (%)", fontsize=6)
+ax_line.set_xlabel("Year", fontsize=6)
 ax_line.set_ylim(0, 100)
 ax_line.grid(True, linestyle="--", alpha=0.5)
-ax_line.legend(bbox_to_anchor=(1.02, 1), loc='upper left', fontsize=9)
+ax_line.legend(bbox_to_anchor=(1.02, 1), loc='upper left', fontsize=8)
 
 plt.tight_layout()
 st.pyplot(fig_line)
