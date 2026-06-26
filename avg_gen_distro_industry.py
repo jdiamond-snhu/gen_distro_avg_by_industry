@@ -1,25 +1,27 @@
 import streamlit as st
+import matplotlib.pyplot as plt
 import pandas as pd
 import os
 
-# 1. Cache the function so the cloud server doesn't hit the BLS API on every single click
+# Set up page configuration
+st.set_page_config(page_title="Historical Gender Ratio", layout="wide")
+st.title("📊 Historical Gender Ratio Dashboard by Industry")
+
+# --- DYNAMIC LIVE DATASET LOADER ---
 @st.cache_data
 def load_live_data():
     csv_filename = "gender_by_industry.csv"
     
-    # Check if the CSV file exists on the Streamlit server instance
+    # If the file isn't on the cloud server yet, run your fetch_data script
     if not os.path.exists(csv_filename):
         st.info("🔄 First-time setup: Fetching live data from the BLS API...")
-        
-        # This imports your fetch_data.py file and runs its main function
         import fetch_data
         fetch_data.fetch_bls_data()
         
     return pd.read_csv(csv_filename)
 
-# 2. Call the function to populate your dashboard variables
+# Automatically loads your data safely without needing mock variables
 df_historical = load_live_data()
-df_historical = pd.DataFrame(historical_data)
 
 # --- SIDEBAR YEAR FILTERS ---
 st.sidebar.header("🗓️ Select Year Range")
