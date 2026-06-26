@@ -1,22 +1,24 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 import pandas as pd
+import os
 
-# Set up page configuration
-st.set_page_config(page_title="Historical Gender Ratio", layout="wide")
-st.title("📊 Historical Gender Ratio Dashboard by Industry")
-
-@st.cache_data # This optimization caches the data so your file isn't re-read on every click
-def load_scraped_data():
-    try:
-        return pd.read_csv("gender_by_industry.csv")
-    except FileNotFoundError:
-        # Fallback if you haven't run fetch_data.py yet
-        st.warning("Data file not found. Running script to fetch live data...")
+# 1. Cache the function so the cloud server doesn't hit the BLS API on every single click
+@st.cache_data
+def load_live_data():
+    csv_filename = "gender_by_industry.csv"
+    
+    # Check if the CSV file exists on the Streamlit server instance
+    if not os.path.exists(csv_filename):
+        st.info("🔄 First-time setup: Fetching live data from the BLS API...")
+        
+        # This imports your fetch_data.py file and runs its main function
         import fetch_data
-        return fetch_data.fetch_bls_data()
+        fetch_data.fetch_bls_data()
+        
+    return pd.read_csv(csv_filename)
 
-df_historical = load_scraped_data()
+# 2. Call the function to populate your dashboard variables
+df_historical = load_live_data()
 df_historical = pd.DataFrame(historical_data)
 
 # --- SIDEBAR YEAR FILTERS ---
