@@ -46,6 +46,18 @@ raw_data = {
     ]
 }
 
+# --- RELEVANT WORKPLACE LEGISLATION DATASET ---
+legislation_data = [
+    {"Year": 2010, "Title": "Affordable Care Act (FLSA Provisions)", "Desc": "Introduced early federal protections for nursing mothers in corporate workplaces."},
+    {"Year": 2015, "Title": "State Salary History Bans Begin", "Desc": "States start outlawing candidate salary history queries to prevent compounding gender wage gaps."},
+    {"Year": 2018, "Title": "California SB 826 Mandate", "Desc": "Pioneered legislative requirements mandating public boards to seat female directors."},
+    {"Year": 2020, "Title": "Bostock v. Clayton County", "Desc": "Supreme Court held Title VII civil rights laws fully prohibit gender identity discrimination."},
+    {"Year": 2021, "Title": "Executive Order 14035 Passed", "Desc": "Enforced strict government-wide pay transparency standards and DEIA initiatives."},
+    {"Year": 2022, "Title": "PUMP for Nursing Mothers Act", "Desc": "Expanded FLSA laws granting structural lactation privacy protections across all private industries."},
+    {"Year": 2023, "Title": "Pregnant Workers Fairness Act", "Desc": "Federal mandate securing reasonable corporate accommodations for pregnancy or child-birth limits."},
+    {"Year": 2024, "Title": "Multi-State Pay Disclosure Waves", "Desc": "Widespread adoption of mandatory listing of true salary ranges on job descriptions across major regions."}
+]
+
 df_historical = pd.DataFrame(raw_data)
 
 # --- SIDEBAR RANGE FILTER & STATE ENGINE ---
@@ -53,15 +65,12 @@ st.sidebar.header("🗓️ Select Year Range")
 min_year = int(df_historical["Year"].min())
 max_year = int(df_historical["Year"].max())
 
-# Initialize the slider tracking key in state if it doesn't exist yet
 if "timeline_range" not in st.session_state:
     st.session_state.timeline_range = (min_year, max_year)
 
-# Callback function executed instantly when the reset button is pushed
 def reset_slider():
     st.session_state.timeline_range = (min_year, max_year)
 
-# Timeline scope range slider bound directly to session state
 from_year, to_year = st.sidebar.slider(
     "Timeline Scope:",
     min_value=min_year,
@@ -69,10 +78,24 @@ from_year, to_year = st.sidebar.slider(
     key="timeline_range"
 )
 
-# Render the custom physical reset trigger button below the slider
 st.sidebar.button("↩️ Reset Timeline", on_click=reset_slider, use_container_width=True)
 
-# Filter dataset rows by requested slider window bounds
+# --- DYNAMIC SIDEBAR TIMELINE ENGINE ---
+st.sidebar.markdown("---")
+st.sidebar.subheader("⚖️ Legal Timeline Changes")
+
+# Filter list data objects relative to contemporary scope selection values
+active_laws = [l for l in legislation_data if from_year <= l["Year"] <= to_year]
+
+if active_laws:
+    for law in active_laws:
+        # Format list outputs clearly within structural markdown strings
+        st.sidebar.markdown(f"**{law['Year']} - {law['Title']}**")
+        st.sidebar.caption(law['Desc'])
+else:
+    st.sidebar.info("No major legislative milestones listed within this narrow timeframe window.")
+
+# --- MAIN GRAPH SCREEN LOGIC ---
 filtered_df = df_historical[(df_historical["Year"] >= from_year) & (df_historical["Year"] <= to_year)]
 aggregated_df = filtered_df.groupby("Industry")[["Male (%)", "Female (%)"]].mean().reset_index()
 
