@@ -127,7 +127,7 @@ st.markdown("---")
 
 # --- SECTION 2: LINE GRAPH SECTION (NOW ON BOTTOM) ---
 st.subheader(f"📈 Timeline Trends: Female Workforce Representation ({from_year} - {to_year})")
-st.markdown("*Note how stable and flat the trajectory lines remain over time across different sectors.*")
+st.markdown("Note: The stable and flat trajectory of the lines is not a failure of the equality laws, but instead illustrates the success of the U.S. and other advanced societies that having the freedom to choose one's profession results in that choice aligning with one's preferences.")
 
 fig_line, ax_line = plt.subplots(figsize=(10, 3.5))
 
