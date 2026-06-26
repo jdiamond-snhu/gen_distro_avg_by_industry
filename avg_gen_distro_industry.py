@@ -100,7 +100,7 @@ filtered_df = df_historical[(df_historical["Year"] >= from_year) & (df_historica
 st.subheader(f"📈 Timeline Trends: Female Workforce Representation ({from_year} - {to_year})")
 st.markdown("*Note how stable and flat the trajectory lines remain over time across different sectors.*")
 
-fig_line, ax_line = plt.subplots(figsize=(10, 3.5))
+fig_line, ax_line = plt.subplots(figsize=(8, 2))
 
 for industry in filtered_df["Industry"].unique():
     ind_data = filtered_df[filtered_df["Industry"] == industry].sort_values("Year")
