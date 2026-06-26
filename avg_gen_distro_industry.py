@@ -84,34 +84,57 @@ st.sidebar.button("↩️ Reset Timeline", on_click=reset_slider, use_container_
 st.sidebar.markdown("---")
 st.sidebar.subheader("⚖️ Legal Timeline Changes")
 
-# Filter list data objects relative to contemporary scope selection values
 active_laws = [l for l in legislation_data if from_year <= l["Year"] <= to_year]
 
 if active_laws:
     for law in active_laws:
-        # Format list outputs clearly within structural markdown strings
         st.sidebar.markdown(f"**{law['Year']} - {law['Title']}**")
         st.sidebar.caption(law['Desc'])
 else:
     st.sidebar.info("No major legislative milestones listed within this narrow timeframe window.")
 
-# --- MAIN GRAPH SCREEN LOGIC ---
+# --- FILTER DATA BASED ON SLIDER ---
 filtered_df = df_historical[(df_historical["Year"] >= from_year) & (df_historical["Year"] <= to_year)]
+
+# --- ADDING THE NEW LINE GRAPH SECTION ---
+st.subheader(f"📈 Timeline Trends: Female Workforce Representation ({from_year} - {to_year})")
+st.markdown("*Note how stable and flat the trajectory lines remain over time across different sectors.*")
+
+# Create a wide line graph plotting female percentage over time
+fig_line, ax_line = plt.subplots(figsize=(10, 3.5))
+
+# Plot a line for each individual industry
+for industry in filtered_df["Industry"].unique():
+    ind_data = filtered_df[filtered_df["Industry"] == industry].sort_values("Year")
+    ax_line.plot(ind_data["Year"], ind_data["Female (%)"], marker='o', linewidth=2, label=industry)
+
+ax_line.set_ylabel("Female Employees (%)", fontsize=10)
+ax_line.set_xlabel("Year", fontsize=10)
+ax_line.set_ylim(0, 100) # Keep scale at 0-100% to visualize absolute context, prevents visual exaggeration
+ax_line.grid(True, linestyle="--", alpha=0.5)
+ax_line.legend(bbox_to_anchor=(1.02, 1), loc='upper left', fontsize=9)
+
+# Clean formatting constraints
+plt.tight_layout()
+st.pyplot(fig_line)
+plt.close(fig_line)
+
+st.markdown("---")
+
+# --- GRID RENDERING ENGINE FOR PIES ---
+st.subheader(f"📊 Averaged Section Snapshots ({from_year} to {to_year})")
 aggregated_df = filtered_df.groupby("Industry")[["Male (%)", "Female (%)"]].mean().reset_index()
 
-st.subheader(f"Average Gender Distribution from {from_year} to {to_year} from the U.S. Bureau of Labor Statistics.")
-
-# --- GRID RENDERING ENGINE ---
 cols = st.columns(4)
 colors = ["#2b7bba", "#e05a47"]
 
 for idx, row in aggregated_df.iterrows():
     col = cols[idx % 4]
     with col:
-        fig, ax = plt.subplots(figsize=(2.5, 2.5))
+        fig_pie, ax_pie = plt.subplots(figsize=(2.5, 2.5))
         sizes = [row["Male (%)"], row["Female (%)"]]
         
-        ax.pie(
+        ax_pie.pie(
             sizes, 
             labels=["M", "F"],
             autopct="%1.0f%%",
@@ -119,8 +142,8 @@ for idx, row in aggregated_df.iterrows():
             colors=colors,
             textprops={'fontsize': 8}
         )
-        ax.set_title(f"{row['Industry']}", fontsize=10, fontweight="bold", pad=2)
+        ax_pie.set_title(f"{row['Industry']}", fontsize=10, fontweight="bold", pad=2)
         
         plt.tight_layout()
-        st.pyplot(fig)
-        plt.close(fig)
+        st.pyplot(fig_pie)
+        plt.close(fig_pie)
