@@ -4,7 +4,7 @@ import pandas as pd
 
 # Set up page configuration
 st.set_page_config(page_title="Historical Gender Ratio", layout="wide")
-st.title("📊 Historical Gender Ratio Dashboard by Industry")
+st.title("📊 Historical Gender Participation Ratio by Industry")
 
 # --- COMPLETE VERIFIED HISTORICAL DATASET ---
 raw_data = {
