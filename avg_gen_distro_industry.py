@@ -5,7 +5,7 @@ import pandas as pd
 # Set up page configuration
 st.set_page_config(page_title="Historical Gender Ratio", layout="wide")
 st.title("📊 Historical Gender Participation Ratio by Industry")
-
+st.caption("Disproving the 'lack of representation' myth. By Jeff Diamond-Radecki.")
 # --- COMPLETE VERIFIED HISTORICAL DATASET ---
 raw_data = {
     "Year": [
@@ -127,7 +127,7 @@ st.markdown("---")
 
 # --- SECTION 2: LINE GRAPH SECTION (NOW ON BOTTOM) ---
 st.subheader(f"📈 Timeline Trends: Female Workforce Representation ({from_year} - {to_year})")
-st.markdown("Note: The stable and flat trajectory of the lines is not a failure of the equality laws. But instead illustrates the success of the U.S. (and other advanced societies) in providing freedom to choose one's own profession, and that in doing so it aligns with the fundamental psychological preferences of men and women.")
+st.markdown("Note the mostly flat trajectory. This is not a failure of U.S. labor and equality laws. It is proof that in the U.S. (and other advanced societies) freedom to choose one's own profession exists, and that in most cases that choice aligns with fundamental preferences of men and women.")
 
 fig_line, ax_line = plt.subplots(figsize=(10, 3.5))
 
