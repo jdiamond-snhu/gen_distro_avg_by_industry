@@ -127,7 +127,7 @@ st.markdown("---")
 
 # --- SECTION 2: LINE GRAPH SECTION (NOW ON BOTTOM) ---
 st.subheader(f"📈 Timeline Trends: Female Workforce Representation ({from_year} - {to_year})")
-st.markdown("Note the mostly flat trajectory. This is not a failure of U.S. labor and equality laws. It is proof that in the U.S. (and other advanced societies) freedom to choose one's own profession exists, and that in most cases that choice aligns with fundamental preferences of men and women.")
+st.markdown("Note the mostly flat trajectory. This is not a failure of U.S. labor and equality laws. It is proof that in the U.S. (and other advanced societies) freedom to choose one's own profession exists, and that in most cases that choice aligns with the fundamental preferences of men and women.")
 
 fig_line, ax_line = plt.subplots(figsize=(10, 3.5))
 
